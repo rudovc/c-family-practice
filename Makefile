@@ -124,24 +124,37 @@ depend:
 .PHONY : depend
 
 #=============================================================================
-# Target rules for targets named practice
+# Target rules for targets named c_practice
 
 # Build rule for target.
-practice: cmake_check_build_system
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 practice
-.PHONY : practice
+c_practice: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 c_practice
+.PHONY : c_practice
 
 # fast build rule for target.
-practice/fast:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/practice.dir/build.make CMakeFiles/practice.dir/build
-.PHONY : practice/fast
+c_practice/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/c_practice.dir/build.make CMakeFiles/c_practice.dir/build
+.PHONY : c_practice/fast
+
+#=============================================================================
+# Target rules for targets named cpp_practice
+
+# Build rule for target.
+cpp_practice: cmake_check_build_system
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/Makefile2 cpp_practice
+.PHONY : cpp_practice
+
+# fast build rule for target.
+cpp_practice/fast:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_practice.dir/build.make CMakeFiles/cpp_practice.dir/build
+.PHONY : cpp_practice/fast
 
 src/main.o: src/main.c.o
 .PHONY : src/main.o
 
 # target to build an object file
 src/main.c.o:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/practice.dir/build.make CMakeFiles/practice.dir/src/main.c.o
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/c_practice.dir/build.make CMakeFiles/c_practice.dir/src/main.c.o
 .PHONY : src/main.c.o
 
 src/main.i: src/main.c.i
@@ -149,7 +162,7 @@ src/main.i: src/main.c.i
 
 # target to preprocess a source file
 src/main.c.i:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/practice.dir/build.make CMakeFiles/practice.dir/src/main.c.i
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/c_practice.dir/build.make CMakeFiles/c_practice.dir/src/main.c.i
 .PHONY : src/main.c.i
 
 src/main.s: src/main.c.s
@@ -157,8 +170,32 @@ src/main.s: src/main.c.s
 
 # target to generate assembly for a file
 src/main.c.s:
-	$(MAKE) $(MAKESILENT) -f CMakeFiles/practice.dir/build.make CMakeFiles/practice.dir/src/main.c.s
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/c_practice.dir/build.make CMakeFiles/c_practice.dir/src/main.c.s
 .PHONY : src/main.c.s
+
+src/main.o: src/main.cpp.o
+.PHONY : src/main.o
+
+# target to build an object file
+src/main.cpp.o:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_practice.dir/build.make CMakeFiles/cpp_practice.dir/src/main.cpp.o
+.PHONY : src/main.cpp.o
+
+src/main.i: src/main.cpp.i
+.PHONY : src/main.i
+
+# target to preprocess a source file
+src/main.cpp.i:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_practice.dir/build.make CMakeFiles/cpp_practice.dir/src/main.cpp.i
+.PHONY : src/main.cpp.i
+
+src/main.s: src/main.cpp.s
+.PHONY : src/main.s
+
+# target to generate assembly for a file
+src/main.cpp.s:
+	$(MAKE) $(MAKESILENT) -f CMakeFiles/cpp_practice.dir/build.make CMakeFiles/cpp_practice.dir/src/main.cpp.s
+.PHONY : src/main.cpp.s
 
 # Help Target
 help:
@@ -169,7 +206,11 @@ help:
 	@echo "... codegen"
 	@echo "... edit_cache"
 	@echo "... rebuild_cache"
-	@echo "... practice"
+	@echo "... c_practice"
+	@echo "... cpp_practice"
+	@echo "... src/main.o"
+	@echo "... src/main.i"
+	@echo "... src/main.s"
 	@echo "... src/main.o"
 	@echo "... src/main.i"
 	@echo "... src/main.s"
