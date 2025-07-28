@@ -2,6 +2,7 @@ cmake_minimum_required(VERSION 4.0.3)
 
 project(Practice)
 
+set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED 11)
 add_executable(c_practice src/main.c)
