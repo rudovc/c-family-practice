@@ -1,4 +1,8 @@
 build:
-    cmake --build .
+    cmake --build . --config Debug
 configure:
-    cmake -D CMAKE_CXX_COMPILER="clang++" -D CMAKE_C_COMPILER="clang" .
+    cmake -D CMAKE_BUILD_TYPE="Debug" -D CMAKE_CXX_COMPILER="clang++" -D CMAKE_C_COMPILER="clang" .
+runc:
+    ./out/c_practice
+runcpp:
+    ./out/c_practice
