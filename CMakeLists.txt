@@ -11,25 +11,25 @@ set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS}\
   -fsanitize=address\
   -fno-omit-frame-pointer\
-  -Wall -Werror"
+  -Wall -Werror -g -O0"
 )
 set(CMAKE_C_FLAGS
     "${CMAKE_C_FLAGS}\
   -fsanitize=address\
   -fno-omit-frame-pointer\
-  -Wall -Werror"
+  -Wall -Werror -g -O0"
 )
 set(CMAKE_CXX_FLAGS_DEBUG
     "${CMAKE_CXX_FLAGS_DEBUG}\
   -fsanitize=address\
   -fno-omit-frame-pointer\
-  -Wall -Werror")
+  -Wall -Werror -g -O0")
 set(CMAKE_C_FLAGS_DEBUG
     "${CMAKE_C_FLAGS_DEBUG}\
   -fsanitize=address\
   -fno-omit-frame-pointer\
-  -Wall -Werror")
-add_executable(c_practice src/c/main.c src/c/lib/intarray.c)
+  -Wall -Werror -g -O0")
+add_executable(c_practice src/c/main.c src/c/lib/intarray.c src/c/lib/arena.c)
 add_executable(cpp_practice src/cpp/main.cpp)
 set_target_properties(c_practice
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY out/
