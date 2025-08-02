@@ -1,32 +1,18 @@
-#include <stddef.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
+#ifndef INT_ARRAY
+#include "./lib/intarray.h"
+#define INT_ARRAY
+#endif
+
+#ifndef ARENA
+#include "./lib/arena.h"
+#define ARENA
+#endif
+
 static const size_t INPUT_BUFFER_SIZE = 13;
-
-struct IntArray {
-  int *arr;
-  int len;
-};
-
-typedef struct IntArray IntArray;
-
-IntArray initialize_int_array(int len) {
-  IntArray int_array = {.arr = malloc(len), .len = len};
-
-  return int_array;
-}
-
-IntArray reverse_int_array(IntArray *array) {
-  IntArray new_int_arr = initialize_int_array(array->len);
-
-  for (int i = 0; i < array->len; ++i) {
-    new_int_arr.arr[(array->len - 1) - i] = array->arr[i];
-  }
-
-  return new_int_arr;
-}
 
 enum task {
   print_user_input_task,
@@ -69,13 +55,13 @@ int main() {
   }
 
   if (strcmp(input, OPTIONS[reverse_array_task]) == 0) {
-    IntArray input_int_array = initialize_int_array(4);
+    IntArray input_int_array = initialize_int_array(4, malloc);
 
     int array_to_reverse[] = {1, 4, 3, 2};
 
     input_int_array.arr = array_to_reverse;
 
-    IntArray output_int_array = reverse_int_array(&input_int_array);
+    IntArray output_int_array = reverse_int_array(&input_int_array, malloc);
 
     for (int i = 0; i < output_int_array.len; ++i) {
       printf("%d\n", output_int_array.arr[i]);

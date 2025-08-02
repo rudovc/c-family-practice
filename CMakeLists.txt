@@ -5,6 +5,8 @@ project(Practice)
 set(CMAKE_BUILD_TYPE Debug)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED 11)
+set(CMAKE_C_STANDARD 99)
+set(CMAKE_C_STANDARD_REQUIRED 99)
 set(CMAKE_CXX_FLAGS
     "${CMAKE_CXX_FLAGS}\
   -fsanitize=address\
@@ -27,7 +29,15 @@ set(CMAKE_C_FLAGS_DEBUG
   -fsanitize=address\
   -fno-omit-frame-pointer\
   -Wall -Werror")
-add_executable(c_practice src/main.c)
-add_executable(cpp_practice src/main.cpp)
-set_target_properties(c_practice PROPERTIES RUNTIME_OUTPUT_DIRECTORY out/)
-set_target_properties(cpp_practice PROPERTIES RUNTIME_OUTPUT_DIRECTORY out/)
+add_executable(c_practice src/c/main.c src/c/lib/intarray.c)
+add_executable(cpp_practice src/cpp/main.cpp)
+set_target_properties(c_practice
+    PROPERTIES RUNTIME_OUTPUT_DIRECTORY out/
+    UNITY_BUILD ON)
+set_target_properties(cpp_practice PROPERTIES
+    RUNTIME_OUTPUT_DIRECTORY out/
+    UNITY_BUILD ON)
+target_include_directories(c_practice PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/c")
+target_include_directories(cpp_practice PRIVATE
+    "${CMAKE_CURRENT_SOURCE_DIR}/src/cpp")
