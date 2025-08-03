@@ -8,3 +8,5 @@ runc:
     ./out/c_practice
 runcpp:
     ./out/c_practice
+format:
+    find ./src/ -iname '*.h' -o -iname '*.cpp' -o -iname '*.c' | xargs clang-format -i
