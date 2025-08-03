@@ -1,15 +1,8 @@
 #include <stdio.h>
 #include <string.h>
 
-#ifndef INT_ARRAY
-#include "./lib/intarray.h"
-#define INT_ARRAY
-#endif
-
-#ifndef ARENA
 #include "./lib/arena.h"
-#define ARENA
-#endif
+#include "./lib/intarray.h"
 
 static const ptrdiff_t INPUT_BUFFER_SIZE = 13;
 static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);

@@ -3,33 +3,22 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#ifndef INT_ARRAY
-#  include "intarray.h"
-#  define INT_ARRAY
-#endif
-#ifndef ARENA
-#  include "arena.h"
-#  define ARENA
-#endif
+#include "arena.h"
+#include "intarray.h"
 
 int static const SIZE_OF_INT32 = sizeof(int32_t);
 
-int32_t calculate_size_of_int32_array(int len)
-{
-  return len * SIZE_OF_INT32;
-}
+int32_t calculate_size_of_int32_array(int len) { return len * SIZE_OF_INT32; }
 
-Int32Array new_int32_array(int len, int* start)
-{
+Int32Array new_int32_array(int len, int *start) {
   Int32Array int_array = {.arr = start, .len = len};
 
   return int_array;
 }
 
-Int32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator)
-{
+Int32Array reverse_int32_array(Int32Array *array, ArenaAllocator *allocator) {
   int arr_size_in_bytes = calculate_size_of_int32_array(array->len);
-  int* start =
+  int *start =
       allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
 
   Int32Array new_int_arr = new_int32_array(array->len, start);
