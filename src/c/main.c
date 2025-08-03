@@ -1,22 +1,20 @@
 #include <stdio.h>
-#include <stdlib.h>
 #include <string.h>
 
 #ifndef INT_ARRAY
-#  include "./lib/intarray.h"
-#  define INT_ARRAY
+#include "./lib/intarray.h"
+#define INT_ARRAY
 #endif
 
 #ifndef ARENA
-#  include "./lib/arena.h"
-#  define ARENA
+#include "./lib/arena.h"
+#define ARENA
 #endif
 
 static const ptrdiff_t INPUT_BUFFER_SIZE = 13;
 static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);
 
-enum task
-{
+enum task {
   print_user_input_task,
   reverse_array_task,
   twod_array_task,
@@ -25,18 +23,17 @@ enum task
   doubly_linked_list_task
 };
 
-static const char* const OPTIONS[] = {
-    "print", "reverse", "2d-array", "dynamic", "linked", "doubly-linked"};
+static const char *const OPTIONS[] = {"print",   "reverse", "2d-array",
+                                      "dynamic", "linked",  "doubly-linked"};
 
-int main()
-{
+int main() {
   ArenaAllocator arena =
       new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
 
   char buffer[INPUT_BUFFER_SIZE];
 
-  char* status = fgets(buffer, (int)sizeof(buffer), stdin);
-  char* input = allocate_to_arena(INPUT_BUFFER_SIZE, &arena, DEFAULT_ALIGNMENT);
+  char *status = fgets(buffer, (int)sizeof(buffer), stdin);
+  char *input = allocate_to_arena(INPUT_BUFFER_SIZE, &arena, DEFAULT_ALIGNMENT);
 
   if (status == NULL || input == NULL) {
     perror("Some error happened!");
@@ -61,7 +58,7 @@ int main()
   }
 
   if (strcmp(input, OPTIONS[reverse_array_task]) == 0) {
-    int* input_int_array_start = allocate_to_arena(
+    int *input_int_array_start = allocate_to_arena(
         calculate_size_of_int32_array(4), &arena, DEFAULT_ALIGNMENT);
 
     if (input_int_array_start == NULL) {
