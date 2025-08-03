@@ -92,8 +92,8 @@ BreakBeforeTernaryOperators: true
 BreakConstructorInitializers: BeforeComma
 BreakInheritanceList: BeforeComma
 BreakStringLiterals: true
-ColumnLimit: 80
-CommentPragmas: '^ IWYU pragma:'
+ColumnLimit: 120
+CommentPragmas: "^ IWYU pragma:"
 CompactNamespaces: false
 ConstructorInitializerIndentWidth: 4
 ContinuationIndentWidth: 4
@@ -113,7 +113,7 @@ IfMacros:
 IncludeBlocks: Regroup
 IncludeCategories:
   # Standard library headers come before anything else
-  - Regex: '^<[a-z_]+>'
+  - Regex: "^<[a-z_]+>"
     Priority: -1
     SortPriority: 0
     CaseSensitive: false
@@ -121,16 +121,16 @@ IncludeCategories:
     Priority: 1
     SortPriority: 0
     CaseSensitive: false
-  - Regex: '^<.*'
+  - Regex: "^<.*"
     Priority: 2
     SortPriority: 0
     CaseSensitive: false
-  - Regex: '.*'
+  - Regex: ".*"
     Priority: 3
     SortPriority: 0
     CaseSensitive: false
-IncludeIsMainRegex: ''
-IncludeIsMainSourceRegex: ''
+IncludeIsMainRegex: ""
+IncludeIsMainSourceRegex: ""
 IndentAccessModifiers: false
 IndentCaseBlocks: false
 IndentCaseLabels: true
@@ -156,8 +156,8 @@ KeepEmptyLinesAtTheStartOfBlocks: false
 KeepEmptyLinesAtEOF: false
 LambdaBodyIndentation: Signature
 LineEnding: LF
-MacroBlockBegin: ''
-MacroBlockEnd: ''
+MacroBlockBegin: ""
+MacroBlockEnd: ""
 MaxEmptyLinesToKeep: 1
 NamespaceIndentation: None
 ObjCBinPackProtocolList: Never
@@ -188,9 +188,9 @@ RawStringFormats:
       - cpp
       - Cpp
       - CPP
-      - 'c++'
-      - 'C++'
-    CanonicalDelimiter: ''
+      - "c++"
+      - "C++"
+    CanonicalDelimiter: ""
     BasedOnStyle: google
   - Language: TextProto
     Delimiters:
@@ -208,7 +208,7 @@ RawStringFormats:
       - ParseTextProtoOrDie
       - ParseTestProto
       - ParsePartialTestProto
-    CanonicalDelimiter: ''
+    CanonicalDelimiter: ""
     BasedOnStyle: google
 ReferenceAlignment: Pointer
 ReflowComments: true
@@ -274,4 +274,3 @@ WhitespaceSensitiveMacros:
   - STRINGIZE
   - PP_STRINGIZE
   - BOOST_PP_STRINGIZE
-...
