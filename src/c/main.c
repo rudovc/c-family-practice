@@ -4,7 +4,7 @@
 #include "./lib/arena.h"
 #include "./lib/intarray.h"
 
-static const ptrdiff_t INPUT_BUFFER_SIZE = 13;
+static const ptrdiff_t INPUT_BUFFER_SIZE = 16;
 static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);
 
 enum task {
