@@ -33,9 +33,9 @@ DECLARE_UNWRAP(MaybeInt32Array, Int32Array)
 DECLARE_NEW_NOTHING(MaybeInt32Array)
 DECLARE_NEW_EXISTS(MaybeInt32Array, Int32Array)
 
-MaybeInt32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator);
-
 MAYBE(StringArray) MaybeStringArray;
-DECLARE_UNWRAP(MaybeStringArray, StringArray)
-DECLARE_NEW_NOTHING(MaybeStringArray)
-DECLARE_NEW_EXISTS(MaybeStringArray, StringArray)
+DECLARE_UNWRAP(MaybeStringArray, StringArray);
+DECLARE_NEW_NOTHING(MaybeStringArray);
+DECLARE_NEW_EXISTS(MaybeStringArray, StringArray);
+
+MaybeInt32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator);

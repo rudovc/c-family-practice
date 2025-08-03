@@ -23,6 +23,10 @@ IMPLEMENT_UNWRAP(MaybeInt32Array, Int32Array)
 IMPLEMENT_NEW_NOTHING(MaybeInt32Array)
 IMPLEMENT_NEW_EXISTS(MaybeInt32Array, Int32Array)
 
+IMPLEMENT_UNWRAP(MaybeStringArray, StringArray)
+IMPLEMENT_NEW_NOTHING(MaybeStringArray)
+IMPLEMENT_NEW_EXISTS(MaybeStringArray, StringArray)
+
 MaybeInt32Array reverse_int32_array(Int32Array *array,
                                     ArenaAllocator *allocator) {
   int32_t arr_size_in_bytes = calculate_size_of_int32_array(array->len);
@@ -34,8 +38,6 @@ MaybeInt32Array reverse_int32_array(Int32Array *array,
   if (start == NULL) {
     errno = ENOMEM;
     perror("Error:");
-
-    free_arena(*allocator);
 
     return new_nothing_MaybeInt32Array();
   }

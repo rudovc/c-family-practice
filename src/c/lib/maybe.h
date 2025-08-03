@@ -2,8 +2,6 @@
 
 #include <stdint.h>
 
-#include "str.h"
-
 enum maybe
 {
   nothing,
@@ -33,18 +31,16 @@ DECLARE_UNWRAP(MaybeInt32, int32_t)
 DECLARE_NEW_NOTHING(MaybeInt32)
 DECLARE_NEW_EXISTS(MaybeInt32, int32_t)
 
-MAYBE(String) MaybeString;
-DECLARE_UNWRAP(MaybeString, String);
-DECLARE_NEW_NOTHING(MaybeString);
-DECLARE_NEW_EXISTS(MaybeString, String);
-
 #define IMPLEMENT_UNWRAP(T, R) \
   R unwrap_##T(T maybe_struct) \
   { \
     if (maybe_struct.exists) { \
       return maybe_struct.item; \
     } \
-    fprintf(stderr, "Called 'unwrap' on empty Maybe<" #R ">"); \
+    int32_t err = fprintf(stderr, "Called 'unwrap' on empty Maybe<" #R ">"); \
+    if (err < 0) { \
+      perror("Error"); \
+    } \
     abort(); \
   }
 

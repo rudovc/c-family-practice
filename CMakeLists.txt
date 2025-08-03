@@ -36,6 +36,7 @@ add_executable(c_practice
   src/c/lib/arena.c
   src/c/lib/maybe.c
   src/c/lib/error.c
+  src/c/lib/str.c
 )
 add_executable(cpp_practice src/cpp/main.cpp)
 set_target_properties(c_practice
