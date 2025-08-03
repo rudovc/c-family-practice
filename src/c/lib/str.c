@@ -3,10 +3,12 @@
 #include "heaparray.h"
 #include <asm-generic/errno-base.h>
 #include <errno.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
-String new_string(int len, char *start) {
+String new_string(int32_t len, char *start) {
   String string = {.str = start, .len = len};
 
   return string;
@@ -37,36 +39,37 @@ MaybeString reverse_string(String *string, ArenaAllocator *allocator) {
   return new_exists_MaybeString(new_char_arr);
 }
 
-// MaybeStringArray split_string_on_char(String *string, ArenaAllocator
-// *allocator,
-//                                       char delimiter) {
-//   size_t size_of_string_in_bytes = string->len * sizeof(char);
-//
-//   if (size_of_string_in_bytes > PTRDIFF_MAX) {
-//     print_error("Tried to perform split operation on string that's too
-//     long");
-//
-//     return new_nothing_MaybeStringArray();
-//   }
-//
-//   char str_char = 0;
-//   int buffer_i = 0;
-//   char *buffer =
-//       allocate_to_arena(size_of_string_in_bytes, allocator,
-//       DEFAULT_ALIGNMENT);
-//   MaybeStringArray string_array = new_nothing_MaybeStringArray();
-//
-//   for (int i = 0; i < string->len; i++) {
-//     str_char = string->str[i];
-//
-//     if (str_char == delimiter) {
-//       buffer_i = 0;
-//
-//       if (string_array.exists) {
-//         // string_array.item.len =
-//       }
-//     } else {
-//       buffer[buffer_i] = str_char;
-//     }
-//   }
-// }
+MaybeStringArray split_string_on_char(String *string, ArenaAllocator *allocator,
+                                      char delimiter) {
+  size_t size_of_string_in_bytes = string->len * sizeof(char);
+
+  if (size_of_string_in_bytes > PTRDIFF_MAX) {
+    print_error("Tried to perform split operation on string that's too long");
+
+    return new_nothing_MaybeStringArray();
+  }
+
+  char str_char = 0;
+  int buffer_i = 0;
+  char *buffer =
+      allocate_to_arena(size_of_string_in_bytes, allocator, DEFAULT_ALIGNMENT);
+  MaybeStringArray string_array = new_nothing_MaybeStringArray();
+
+  for (int i = 0; i < string->len; i++) {
+    str_char = string->str[i];
+
+    if (str_char == delimiter) {
+      buffer_i = 0;
+
+      if (string_array.exists) {
+        int32_t len = string_array.item.len;
+        string_array.item.len = len + 1;
+
+        // TODO: Handle narrowing conversion
+        string_array.item.arr[len] = new_string(strlen(buffer), buffer);
+      }
+    } else {
+      buffer[buffer_i] = str_char;
+    }
+  }
+}
