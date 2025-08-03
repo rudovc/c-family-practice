@@ -6,9 +6,11 @@
 #include <string.h>
 
 #include "./lib/arena.h"
-#include "./lib/intarray.h"
+#include "./lib/error.h"
+#include "./lib/heaparray.h"
+#include "./lib/input.h"
 
-static const ptrdiff_t INPUT_BUFFER_SIZE = 16;
+static const int32_t INPUT_BUFFER_SIZE = 16;
 static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);
 
 enum task {
@@ -26,36 +28,24 @@ int main() {
   ArenaAllocator arena =
       new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
 
-  char buffer[INPUT_BUFFER_SIZE];
+  MaybeString maybe_input = take_user_input_stdin(INPUT_BUFFER_SIZE, &arena);
 
-  char *status = fgets(buffer, (int)sizeof(buffer), stdin);
-  char *input = allocate_to_arena(INPUT_BUFFER_SIZE, &arena, DEFAULT_ALIGNMENT);
-
-  if (status == NULL || input == NULL) {
-    errno = 1;
-    perror("Error:");
-
-    free_arena(arena);
+  if (!maybe_input.exists) {
+    print_error("Failed to take user input");
 
     return 1;
   }
 
-  int err = sscanf(buffer, "%s", input);
+  String input_string = maybe_input.item;
+  char *input = input_string.arr;
 
-  if (err == EOF || err < 0) {
-    perror("Error:");
+  int compare_output = strcmp(input, OPTIONS[print_user_input_task]);
 
-    free_arena(arena);
-
-    return 1;
-  }
-
-  if (strcmp(input, OPTIONS[print_user_input_task]) == 0) {
+  if (compare_output == 0) {
     printf("Hello, world!");
   }
 
   if (strcmp(input, OPTIONS[reverse_array_task]) == 0) {
-
     int *input_int_array_start = allocate_to_arena(
         calculate_size_of_int32_array(4), &arena, DEFAULT_ALIGNMENT);
 

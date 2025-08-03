@@ -1,3 +1,5 @@
+clean:
+    rm -rf ./CMakeCache.txt && rm -rf ./CMakeFiles/
 build:
     cmake --build . --config Debug
 configure:
