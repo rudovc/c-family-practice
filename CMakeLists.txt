@@ -29,7 +29,11 @@ set(CMAKE_C_FLAGS_DEBUG
   -fsanitize=address\
   -fno-omit-frame-pointer\
   -Wall -Werror -g -O0")
-add_executable(c_practice src/c/main.c src/c/lib/intarray.c src/c/lib/arena.c)
+add_executable(c_practice
+  src/c/main.c
+  src/c/lib/intarray.c
+  src/c/lib/arena.c
+  src/c/lib/maybe.c)
 add_executable(cpp_practice src/cpp/main.cpp)
 set_target_properties(c_practice
     PROPERTIES RUNTIME_OUTPUT_DIRECTORY out/

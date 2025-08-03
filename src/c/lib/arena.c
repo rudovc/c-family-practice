@@ -1,3 +1,5 @@
+#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -27,9 +29,10 @@ void *allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator *arena,
     int err = sprintf(buffer, "Missing %td  bytes for allocation!", difference);
 
     if (err < 0) {
-      perror("Missing room for allocation!");
+      perror("Error:");
     }
 
+    errno = ENOMEM;
     perror(buffer);
 
     return NULL;

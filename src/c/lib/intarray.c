@@ -1,3 +1,5 @@
+#include <asm-generic/errno-base.h>
+#include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
 #include <stdio.h>
@@ -24,7 +26,8 @@ Int32Array reverse_int32_array(Int32Array *array, ArenaAllocator *allocator) {
   Int32Array new_int_arr = new_int32_array(array->len, start);
 
   if (start == NULL) {
-    perror("Failed to allocate memory!");
+    errno = ENOMEM;
+    perror("Error:");
 
     free_arena(*allocator);
     abort();

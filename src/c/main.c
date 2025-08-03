@@ -1,3 +1,7 @@
+#include "./lib/maybe.h"
+#include <asm-generic/errno-base.h>
+#include <errno.h>
+#include <stdint.h>
 #include <stdio.h>
 #include <string.h>
 
@@ -18,7 +22,6 @@ enum task {
 
 static const char *const OPTIONS[] = {"print",   "reverse", "2d-array",
                                       "dynamic", "linked",  "doubly-linked"};
-
 int main() {
   ArenaAllocator arena =
       new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
@@ -29,7 +32,8 @@ int main() {
   char *input = allocate_to_arena(INPUT_BUFFER_SIZE, &arena, DEFAULT_ALIGNMENT);
 
   if (status == NULL || input == NULL) {
-    perror("Some error happened!");
+    errno = 1;
+    perror("Error:");
 
     free_arena(arena);
 
@@ -39,7 +43,7 @@ int main() {
   int err = sscanf(buffer, "%s", input);
 
   if (err == EOF || err < 0) {
-    perror("Some error happened!");
+    perror("Error:");
 
     free_arena(arena);
 
@@ -47,15 +51,17 @@ int main() {
   }
 
   if (strcmp(input, OPTIONS[print_user_input_task]) == 0) {
-    printf("%s\n", input);
+    printf("Hello, world!");
   }
 
   if (strcmp(input, OPTIONS[reverse_array_task]) == 0) {
+
     int *input_int_array_start = allocate_to_arena(
         calculate_size_of_int32_array(4), &arena, DEFAULT_ALIGNMENT);
 
     if (input_int_array_start == NULL) {
-      perror("Failed to allocate memory!");
+      errno = ENOMEM;
+      perror("Error:");
 
       free_arena(arena);
 
