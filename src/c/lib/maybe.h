@@ -2,7 +2,6 @@
 
 #include <stdint.h>
 
-#include "heaparray.h"
 #include "str.h"
 
 enum maybe
@@ -18,35 +17,26 @@ enum maybe
     T item; \
   }
 
-MAYBE(char) MaybeChar;
-MAYBE(String) MaybeString;
-
-MAYBE(int32_t) MaybeInt32;
-MAYBE(Int32Array) MaybeInt32Array;
-
 #define DECLARE_UNWRAP(T, R) R unwrap_##T(T maybe_struct);
 
 #define DECLARE_NEW_NOTHING(T) T new_nothing_##T();
 
 #define DECLARE_NEW_EXISTS(T, R) T new_exists_##T(R item);
 
+MAYBE(char) MaybeChar;
 DECLARE_UNWRAP(MaybeChar, char);
-DECLARE_UNWRAP(MaybeString, String);
-
-DECLARE_UNWRAP(MaybeInt32, int32_t)
-DECLARE_UNWRAP(MaybeInt32Array, Int32Array)
-
 DECLARE_NEW_NOTHING(MaybeChar);
-DECLARE_NEW_NOTHING(MaybeString);
-
-DECLARE_NEW_NOTHING(MaybeInt32)
-DECLARE_NEW_NOTHING(MaybeInt32Array)
-
 DECLARE_NEW_EXISTS(MaybeChar, char);
-DECLARE_NEW_EXISTS(MaybeString, String);
 
+MAYBE(int32_t) MaybeInt32;
+DECLARE_UNWRAP(MaybeInt32, int32_t)
+DECLARE_NEW_NOTHING(MaybeInt32)
 DECLARE_NEW_EXISTS(MaybeInt32, int32_t)
-DECLARE_NEW_EXISTS(MaybeInt32Array, Int32Array)
+
+MAYBE(String) MaybeString;
+DECLARE_UNWRAP(MaybeString, String);
+DECLARE_NEW_NOTHING(MaybeString);
+DECLARE_NEW_EXISTS(MaybeString, String);
 
 #define IMPLEMENT_UNWRAP(T, R) \
   R unwrap_##T(T maybe_struct) \

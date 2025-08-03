@@ -11,7 +11,7 @@ struct ArenaAllocator
 };
 
 typedef struct ArenaAllocator ArenaAllocator;
-ptrdiff_t const DEFAULT_ALIGNMENT;
+ptrdiff_t const DEFAULT_ALIGNMENT = 8;
 
 void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment);
 void free_arena(ArenaAllocator arena);
