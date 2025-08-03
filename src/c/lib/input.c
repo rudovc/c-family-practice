@@ -31,7 +31,7 @@ MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes,
   // Strip whitespace from fgets buffer
   buffer[len - 1] = 0;
 
-  String string = {.len = len - 1, .arr = buffer};
+  String string = {.len = len - 1, .str = buffer};
 
   return new_exists_MaybeString(string);
 }

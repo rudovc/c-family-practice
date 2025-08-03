@@ -3,6 +3,7 @@
 #include <stdint.h>
 
 #include "heaparray.h"
+#include "str.h"
 
 enum maybe
 {
@@ -23,31 +24,31 @@ MAYBE(String) MaybeString;
 MAYBE(int32_t) MaybeInt32;
 MAYBE(Int32Array) MaybeInt32Array;
 
-#define UNWRAP_H(T, R) R unwrap_##T(T maybe_struct);
+#define DECLARE_UNWRAP(T, R) R unwrap_##T(T maybe_struct);
 
-#define NEW_NOTHING_H(T) T new_nothing_##T();
+#define DECLARE_NEW_NOTHING(T) T new_nothing_##T();
 
-#define NEW_EXISTS_H(T, R) T new_exists_##T(R item);
+#define DECLARE_NEW_EXISTS(T, R) T new_exists_##T(R item);
 
-UNWRAP_H(MaybeChar, char);
-UNWRAP_H(MaybeString, String);
+DECLARE_UNWRAP(MaybeChar, char);
+DECLARE_UNWRAP(MaybeString, String);
 
-UNWRAP_H(MaybeInt32, int32_t)
-UNWRAP_H(MaybeInt32Array, Int32Array)
+DECLARE_UNWRAP(MaybeInt32, int32_t)
+DECLARE_UNWRAP(MaybeInt32Array, Int32Array)
 
-NEW_NOTHING_H(MaybeChar);
-NEW_NOTHING_H(MaybeString);
+DECLARE_NEW_NOTHING(MaybeChar);
+DECLARE_NEW_NOTHING(MaybeString);
 
-NEW_NOTHING_H(MaybeInt32)
-NEW_NOTHING_H(MaybeInt32Array)
+DECLARE_NEW_NOTHING(MaybeInt32)
+DECLARE_NEW_NOTHING(MaybeInt32Array)
 
-NEW_EXISTS_H(MaybeChar, char);
-NEW_EXISTS_H(MaybeString, String);
+DECLARE_NEW_EXISTS(MaybeChar, char);
+DECLARE_NEW_EXISTS(MaybeString, String);
 
-NEW_EXISTS_H(MaybeInt32, int32_t)
-NEW_EXISTS_H(MaybeInt32Array, Int32Array)
+DECLARE_NEW_EXISTS(MaybeInt32, int32_t)
+DECLARE_NEW_EXISTS(MaybeInt32Array, Int32Array)
 
-#define UNWRAP(T, R) \
+#define IMPLEMENT_UNWRAP(T, R) \
   R unwrap_##T(T maybe_struct) \
   { \
     if (maybe_struct.exists) { \
@@ -57,13 +58,13 @@ NEW_EXISTS_H(MaybeInt32Array, Int32Array)
     abort(); \
   }
 
-#define NEW_NOTHING(T) \
+#define IMPLEMENT_NEW_NOTHING(T) \
   T new_nothing_##T() \
   { \
     return (T) {.exists = nothing}; \
   }
 
-#define NEW_EXISTS(T, R) \
+#define IMPLEMENT_NEW_EXISTS(T, R) \
   T new_exists_##T(R item) \
   { \
     return (T) {.exists = exists, .item = item}; \

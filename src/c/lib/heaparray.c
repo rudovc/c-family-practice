@@ -7,29 +7,22 @@
 
 #include "arena.h"
 #include "heaparray.h"
+#include "str.h"
 
 int static const SIZE_OF_INT32 = sizeof(int32_t);
 
-int32_t calculate_size_of_int32_array(int len) { return len * SIZE_OF_INT32; }
-
-Int32Array new_int32_array(int len, int *start) {
-  Int32Array int_array = {.arr = start, .len = len};
-
-  return int_array;
+int32_t calculate_size_of_int32_array(int32_t len) {
+  return len * SIZE_OF_INT32;
 }
 
-String new_string(int len, char *start) {
-  String string = {.arr = start, .len = len};
+IMPLEMENT_HEAP_ARRAY(int32_t, Int32Array)
 
-  return string;
-}
-
-Int32Array reverse_int32_array(Int32Array *array, ArenaAllocator *allocator) {
-  int arr_size_in_bytes = calculate_size_of_int32_array(array->len);
-  int *start =
+Int32Array reverse_Int32Array(Int32Array *array, ArenaAllocator *allocator) {
+  int32_t arr_size_in_bytes = calculate_size_of_int32_array(array->len);
+  int32_t *start =
       allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
 
-  Int32Array new_int_arr = new_int32_array(array->len, start);
+  Int32Array new_int_arr = new_Int32Array(array->len, start);
 
   if (start == NULL) {
     errno = ENOMEM;
@@ -46,24 +39,4 @@ Int32Array reverse_int32_array(Int32Array *array, ArenaAllocator *allocator) {
   return new_int_arr;
 }
 
-String reverse_string(String *string, ArenaAllocator *allocator) {
-  int arr_size_in_bytes = calculate_size_of_int32_array(string->len);
-  char *start =
-      allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
-
-  String new_char_arr = new_string(string->len, start);
-
-  if (start == NULL) {
-    errno = ENOMEM;
-    perror("Error:");
-
-    free_arena(*allocator);
-    abort();
-  }
-
-  for (int i = 0; i < string->len; ++i) {
-    new_char_arr.arr[(string->len - 1) - i] = string->arr[i];
-  }
-
-  return new_char_arr;
-}
+IMPLEMENT_HEAP_ARRAY(String, StringArray)

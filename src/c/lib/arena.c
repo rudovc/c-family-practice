@@ -5,7 +5,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#pragma once
 #include "arena.h"
 
 static const ptrdiff_t ERROR_BUFFER_SIZE = 64;

@@ -4,26 +4,26 @@
 #include <stdint.h>
 
 #include "arena.h"
+#include "str.h"
 
-struct Int32Array
-{
-  int32_t* arr;
-  int32_t len;
-};
+#define DECLARE_HEAP_ARRAY(T, N) \
+  typedef struct \
+  { \
+    T* arr; \
+    int32_t len; \
+  } N; \
+  N new_##N(int32_t len, T* start); \
+  N reverse_##N(N* array, ArenaAllocator* allocator);
 
-typedef struct Int32Array Int32Array;
+DECLARE_HEAP_ARRAY(int32_t, Int32Array)
 
-Int32Array new_int32_array(int32_t len, int32_t* start);
-Int32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator);
+#define IMPLEMENT_HEAP_ARRAY(T, N) \
+  N new_##N(int32_t len, T* start) \
+  { \
+    N int_array = {.arr = start, .len = len}; \
+    return int_array; \
+  }
+
 int32_t calculate_size_of_int32_array(int len);
 
-struct String
-{
-  char* arr;
-  int32_t len;
-};
-
-typedef struct String String;
-
-String new_string(int32_t len, char* start);
-String reverse_string(String* string, ArenaAllocator* allocator);
+DECLARE_HEAP_ARRAY(String, StringArray)

@@ -1,19 +1,19 @@
 #include "maybe.h"
 
-UNWRAP(MaybeChar, char);
-UNWRAP(MaybeString, String);
+IMPLEMENT_UNWRAP(MaybeChar, char);
+IMPLEMENT_UNWRAP(MaybeString, String);
 
-UNWRAP(MaybeInt32, int32_t)
-UNWRAP(MaybeInt32Array, Int32Array)
+IMPLEMENT_UNWRAP(MaybeInt32, int32_t)
+IMPLEMENT_UNWRAP(MaybeInt32Array, Int32Array)
 
-NEW_NOTHING(MaybeChar);
-NEW_NOTHING(MaybeString);
+IMPLEMENT_NEW_NOTHING(MaybeChar);
+IMPLEMENT_NEW_NOTHING(MaybeString);
 
-NEW_NOTHING(MaybeInt32)
-NEW_NOTHING(MaybeInt32Array)
+IMPLEMENT_NEW_NOTHING(MaybeInt32)
+IMPLEMENT_NEW_NOTHING(MaybeInt32Array)
 
-NEW_EXISTS(MaybeChar, char);
-NEW_EXISTS(MaybeString, String);
+IMPLEMENT_NEW_EXISTS(MaybeChar, char);
+IMPLEMENT_NEW_EXISTS(MaybeString, String);
 
-NEW_EXISTS(MaybeInt32, int32_t)
-NEW_EXISTS(MaybeInt32Array, Int32Array)
+IMPLEMENT_NEW_EXISTS(MaybeInt32, int32_t)
+IMPLEMENT_NEW_EXISTS(MaybeInt32Array, Int32Array)

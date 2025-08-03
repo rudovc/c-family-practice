@@ -9,6 +9,7 @@
 #include "./lib/error.h"
 #include "./lib/heaparray.h"
 #include "./lib/input.h"
+#include "lib/str.h"
 
 static const int32_t INPUT_BUFFER_SIZE = 16;
 static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);
@@ -37,7 +38,7 @@ int main() {
   }
 
   String input_string = maybe_input.item;
-  char *input = input_string.arr;
+  char *input = input_string.str;
 
   int compare_output = strcmp(input, OPTIONS[print_user_input_task]);
 
@@ -58,14 +59,14 @@ int main() {
       return 1;
     }
 
-    Int32Array input_int_array = new_int32_array(4, input_int_array_start);
+    Int32Array input_int_array = new_Int32Array(4, input_int_array_start);
 
     input_int_array.arr[0] = 1;
     input_int_array.arr[1] = 4;
     input_int_array.arr[2] = 3;
     input_int_array.arr[3] = 2;
 
-    Int32Array output_int_array = reverse_int32_array(&input_int_array, &arena);
+    Int32Array output_int_array = reverse_Int32Array(&input_int_array, &arena);
 
     for (int i = 0; i < output_int_array.len; ++i) {
       printf("%d\n", output_int_array.arr[i]);
