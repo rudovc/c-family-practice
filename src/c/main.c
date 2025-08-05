@@ -8,7 +8,6 @@
 #include "lib/error.h"
 #include "lib/heaparray.h"
 #include "lib/input.h"
-#include "lib/maybe.h"
 #include "lib/str.h"
 
 static const int32_t INPUT_BUFFER_SIZE = 16;
@@ -27,7 +26,15 @@ static const char* const OPTIONS[] = {"print", "reverse", "2d-array", "dynamic",
 
 int main()
 {
-        ArenaAllocator arena = new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
+        MaybeArenaAllocator maybe_arena = try_new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
+
+        if (!maybe_arena.exists) {
+                print_error("Failed to create allocator");
+
+                return 1;
+        }
+
+        ArenaAllocator arena = maybe_arena.item;
 
         MaybeString maybe_input = take_user_input_stdin(INPUT_BUFFER_SIZE, &arena);
 
@@ -47,19 +54,20 @@ int main()
         }
 
         if (strcmp(input, OPTIONS[REVERSE_ARRAY_TASK]) == 0) {
-                int* input_int_array_start =
-                        allocate_to_arena(calculate_size_of_int32_array(4), &arena, DEFAULT_ALIGNMENT);
+                printf("Input a space separated sequence of numbers:\n");
+                maybe_input = take_user_input_stdin(INPUT_BUFFER_SIZE, &arena);
 
-                if (input_int_array_start == NULL) {
-                        errno = ENOMEM;
-                        perror("Error:");
-
-                        free_arena(arena);
+                if (!maybe_input.exists) {
+                        print_error("Failed to take user input");
 
                         return 1;
                 }
 
-                Int32Array input_int_array = new_Int32Array(4, input_int_array_start);
+                MaybeStringArray input = split_string_on_char(&maybe_input.item, &arena, ' ');
+
+                printf("%s", input.item.arr->str);
+
+                Int32Array input_int_array = new_Int32Array(4, &arena);
 
                 input_int_array.arr[0] = 1;
                 input_int_array.arr[1] = 4;

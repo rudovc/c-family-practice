@@ -3,8 +3,6 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-#include "heaparray.h"
-
 IMPLEMENT_UNWRAP(MaybeChar, char);
 IMPLEMENT_NEW_NOTHING(MaybeChar);
 IMPLEMENT_NEW_EXISTS(MaybeChar, char);

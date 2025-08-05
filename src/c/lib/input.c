@@ -5,12 +5,17 @@
 
 #include "arena.h"
 #include "error.h"
-#include "maybe.h"
 #include "str.h"
 
 MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes, ArenaAllocator* allocator)
 {
-        char* buffer = allocate_to_arena(buffer_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
+        MaybePointer maybe_buffer = try_allocate_to_arena(buffer_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
+
+        if (!maybe_buffer.exists) {
+                return new_nothing_MaybeString();
+        }
+
+        char* buffer = maybe_buffer.item;
 
         char* status = fgets(buffer, buffer_size_in_bytes, stdin);
 

@@ -7,9 +7,43 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "maybe.h"
+
 static const ptrdiff_t ERROR_BUFFER_SIZE = 64;
 
-void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment)
+// TODO: This is not a sound implementation at all. If the memory gets copied elsewhere, all pointers already handed out
+// are invalidated
+void* try_grow_arena_by(ptrdiff_t size_in_bytes, ArenaAllocator* arena)
+{
+        ptrdiff_t tail_offset = arena->tail - arena->head;
+        size_t new_size = arena->size;
+
+        if (size_in_bytes < 2 * arena->size) {
+                new_size = arena->size * 2;
+        } else {
+                new_size = arena->size + size_in_bytes;
+        }
+
+        void* new_head = realloc(arena->head, new_size);
+
+        if (new_head == NULL) {
+                errno = ENOMEM;
+
+                perror("Error:");
+
+                return NULL;
+        }
+
+        void* new_tail = new_head + tail_offset;
+
+        arena->head = new_head;
+        arena->tail = new_tail;
+
+        return new_tail;
+}
+
+// TODO: Bump downwards, not upwards
+void* inner_allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment)
 {
         void* start = arena->tail;
         void* new_tail = start + size_in_bytes;
@@ -24,7 +58,7 @@ void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_
                 ptrdiff_t difference = new_tail - (arena->head + arena->size);
 
                 char buffer[ERROR_BUFFER_SIZE];
-                int err = sprintf(buffer, "Missing %td  bytes for allocation!", difference);
+                int err = sprintf(buffer, "Missing %td  bytes for allocation", difference);
 
                 if (err < 0) {
                         perror("Error:");
@@ -41,16 +75,90 @@ void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_
         return start;
 }
 
+void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment)
+{
+        void* start = inner_allocate_to_arena(size_in_bytes, arena, alignment);
+
+        if (start == NULL) {
+                // TODO: We'll revisit this later
+                // start = try_grow_arena_by(size_in_bytes, arena);
+                //
+                // if (start == NULL) {
+                //      abort();
+                // }
+                //
+                // return start;
+
+                abort();
+        }
+
+        return start;
+}
+
+MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment)
+{
+        void* start = inner_allocate_to_arena(size_in_bytes, arena, alignment);
+
+        if (start == NULL) {
+                // TODO: We'll revisit this later
+                // start = try_grow_arena_by(size_in_bytes, arena);
+                //
+                // if (start == NULL) {
+                //         return new_nothing_MaybePointer();
+                // }
+
+                return new_nothing_MaybePointer();
+        }
+
+        return new_exists_MaybePointer(start);
+}
+
 void free_arena(ArenaAllocator arena)
 {
         return free(arena.head);
 }
 
-ArenaAllocator new_arena_allocator(ptrdiff_t size_in_bytes)
+IMPLEMENT_UNWRAP(MaybeArenaAllocator, ArenaAllocator)
+IMPLEMENT_NEW_NOTHING(MaybeArenaAllocator)
+IMPLEMENT_NEW_EXISTS(MaybeArenaAllocator, ArenaAllocator)
+
+IMPLEMENT_UNWRAP(MaybePointer, void*)
+IMPLEMENT_NEW_NOTHING(MaybePointer)
+IMPLEMENT_NEW_EXISTS(MaybePointer, void*)
+
+ArenaAllocator inner_new_arena_allocator(ptrdiff_t size_in_bytes)
 {
         void* head = malloc(size_in_bytes);
 
         ArenaAllocator arena = {.size = size_in_bytes, .head = head, .tail = head};
 
+        if (head == NULL) {
+                errno = ENOMEM;
+
+                perror("Error:");
+        }
+
         return arena;
+}
+
+ArenaAllocator new_arena_allocator(ptrdiff_t size_in_bytes)
+{
+        ArenaAllocator arena = inner_new_arena_allocator(size_in_bytes);
+
+        if (arena.head == NULL) {
+                abort();
+        }
+
+        return arena;
+}
+
+MaybeArenaAllocator try_new_arena_allocator(ptrdiff_t size_in_bytes)
+{
+        ArenaAllocator arena = inner_new_arena_allocator(size_in_bytes);
+
+        if (arena.head == NULL) {
+                return new_nothing_MaybeArenaAllocator();
+        }
+
+        return new_exists_MaybeArenaAllocator(arena);
 }

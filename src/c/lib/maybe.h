@@ -45,11 +45,11 @@ DECLARE_NEW_EXISTS(MaybeInt32, int32_t)
 #define IMPLEMENT_NEW_NOTHING(T) \
         T new_nothing_##T() \
         { \
-                return (T) {.exists = nothing}; \
+                return (T) {.exists = NOTHING}; \
         }
 
 #define IMPLEMENT_NEW_EXISTS(T, R) \
         T new_exists_##T(R item) \
         { \
-                return (T) {.exists = exists, .item = item}; \
+                return (T) {.exists = EXISTS, .item = item}; \
         }
