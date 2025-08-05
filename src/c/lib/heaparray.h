@@ -8,21 +8,20 @@
 #include "str.h"
 
 #define DECLARE_HEAP_ARRAY(T, N) \
-  typedef struct \
-  { \
-    T* arr; \
-    int32_t len; \
-  } N; \
-  N new_##N(int32_t len, T* start);
+        typedef struct { \
+                T* arr; \
+                int32_t len; \
+        } N; \
+        N new_##N(int32_t len, T* start);
 
 DECLARE_HEAP_ARRAY(int32_t, Int32Array)
 
 #define IMPLEMENT_HEAP_ARRAY(T, N) \
-  N new_##N(int32_t len, T* start) \
-  { \
-    N int_array = {.arr = start, .len = len}; \
-    return int_array; \
-  }
+        N new_##N(int32_t len, T* start) \
+        { \
+                N int_array = {.arr = start, .len = len}; \
+                return int_array; \
+        }
 
 DECLARE_HEAP_ARRAY(String, StringArray)
 

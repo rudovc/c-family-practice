@@ -5,10 +5,9 @@
 #include "arena.h"
 #include "maybe.h"
 
-struct String
-{
-  char* str;
-  int32_t len;
+struct String {
+        char* str;
+        int32_t len;
 };
 
 typedef struct String String;

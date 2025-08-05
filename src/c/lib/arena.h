@@ -3,11 +3,10 @@
 #include <stddef.h>
 #include <stdint.h>
 
-struct ArenaAllocator
-{
-  size_t size;
-  void* head;
-  void* tail;
+struct ArenaAllocator {
+        size_t size;
+        void* head;
+        void* tail;
 };
 
 typedef struct ArenaAllocator ArenaAllocator;
