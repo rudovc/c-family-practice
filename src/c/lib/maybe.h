@@ -29,6 +29,11 @@ DECLARE_UNWRAP(MaybeInt32, int32_t)
 DECLARE_NEW_NOTHING(MaybeInt32)
 DECLARE_NEW_EXISTS(MaybeInt32, int32_t)
 
+MAYBE(int16_t) MaybeInt16;
+DECLARE_UNWRAP(MaybeInt16, int16_t)
+DECLARE_NEW_NOTHING(MaybeInt16)
+DECLARE_NEW_EXISTS(MaybeInt16, int16_t)
+
 #define IMPLEMENT_UNWRAP(T, R) \
         R unwrap_##T(T maybe_struct) \
         { \

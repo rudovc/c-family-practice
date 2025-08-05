@@ -14,6 +14,7 @@
         N new_##N(int32_t len, ArenaAllocator* allocator);
 
 DECLARE_HEAP_ARRAY(int32_t, Int32Array)
+DECLARE_HEAP_ARRAY(int16_t, Int16Array)
 
 #define IMPLEMENT_HEAP_ARRAY(T, N) \
         N new_##N(int32_t len, ArenaAllocator* allocator) \
@@ -73,3 +74,10 @@ DECLARE_NEW_NOTHING(MaybeInt32Array)
 DECLARE_NEW_EXISTS(MaybeInt32Array, Int32Array)
 
 MaybeInt32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator);
+
+MAYBE(Int16Array) MaybeInt16Array;
+DECLARE_UNWRAP(MaybeInt16Array, Int16Array)
+DECLARE_NEW_NOTHING(MaybeInt16Array)
+DECLARE_NEW_EXISTS(MaybeInt16Array, Int16Array)
+
+MaybeInt16Array reverse_int16_array(Int16Array* array, ArenaAllocator* allocator);

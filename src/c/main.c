@@ -1,5 +1,4 @@
 #include <asm-generic/errno-base.h>
-#include <errno.h>
 #include <stdint.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,7 +10,7 @@
 #include "lib/str.h"
 
 static const int32_t INPUT_BUFFER_SIZE = 16;
-static const ptrdiff_t REVERSE_ARRAY_SIZE = 4 * sizeof(int32_t);
+static const ptrdiff_t REVERSE_INPUT_ARRAY_BUFFER = 64 * sizeof(int16_t);
 
 enum task {
         PRINT_USER_INPUT_TASK,
@@ -26,7 +25,7 @@ static const char* const OPTIONS[] = {"print", "reverse", "2d-array", "dynamic",
 
 int main()
 {
-        MaybeArenaAllocator maybe_arena = try_new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_ARRAY_SIZE * 2));
+        MaybeArenaAllocator maybe_arena = try_new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_INPUT_ARRAY_BUFFER * 2));
 
         if (!maybe_arena.exists) {
                 print_error("Failed to create allocator");
@@ -67,14 +66,14 @@ int main()
 
                 printf("%s", input.item.arr->str);
 
-                Int32Array input_int_array = new_Int32Array(4, &arena);
+                Int16Array input_int_array = new_Int16Array(4, &arena);
 
                 input_int_array.arr[0] = 1;
                 input_int_array.arr[1] = 4;
                 input_int_array.arr[2] = 3;
                 input_int_array.arr[3] = 2;
 
-                MaybeInt32Array output_maybe_int_array = reverse_int32_array(&input_int_array, &arena);
+                MaybeInt16Array output_maybe_int_array = reverse_int16_array(&input_int_array, &arena);
 
                 if (!output_maybe_int_array.exists) {
                         free_arena(arena);
@@ -82,7 +81,7 @@ int main()
                         return 1;
                 }
 
-                Int32Array output_int_array = unwrap_MaybeInt32Array(output_maybe_int_array);
+                Int16Array output_int_array = unwrap_MaybeInt16Array(output_maybe_int_array);
 
                 for (int i = 0; i < output_int_array.len; ++i) {
                         printf("%d\n", output_int_array.arr[i]);
