@@ -7,6 +7,7 @@
 #include <stdio.h>
 #include <stdlib.h>
 
+#include "error.h"
 #include "maybe.h"
 
 static const ptrdiff_t ERROR_BUFFER_SIZE = 64;
@@ -15,6 +16,8 @@ static const ptrdiff_t ERROR_BUFFER_SIZE = 64;
 // are invalidated
 void* try_grow_arena_by(ptrdiff_t size_in_bytes, ArenaAllocator* arena)
 {
+        free_arena(*arena);
+        print_error("try_grow_arena_by not yet properly implemented");
         ptrdiff_t tail_offset = arena->tail - arena->head;
         size_t new_size = arena->size;
 
@@ -81,13 +84,13 @@ void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_
 
         if (start == NULL) {
                 // TODO: We'll revisit this later
-                // start = try_grow_arena_by(size_in_bytes, arena);
-                //
-                // if (start == NULL) {
-                //      abort();
-                // }
-                //
-                // return start;
+                start = try_grow_arena_by(size_in_bytes, arena);
+
+                if (start == NULL) {
+                        abort();
+                }
+
+                return start;
 
                 abort();
         }
