@@ -3,7 +3,7 @@
 
 auto main() -> int
 {
-  std::cout << "Hello, world!";
+    std::cout << "Hello, world!";
 
-  return 1;
+    return 1;
 }

@@ -21,7 +21,8 @@ MaybeInt32Array reverse_int32_array(Int32Array* array, ArenaAllocator* allocator
 {
         // TODO: Replace with try_new_array
         int32_t arr_size_in_bytes = array->len * sizeof(int32_t);
-        MaybePointer maybe_start = try_allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
+        MaybePointer maybe_start =
+                try_allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
         if (!maybe_start.exists) {
                 return new_nothing_MaybeInt32Array();
         }
@@ -54,7 +55,8 @@ MaybeInt16Array reverse_int16_array(Int16Array* array, ArenaAllocator* allocator
 {
         // TODO: Replace with try_new_array
         int16_t arr_size_in_bytes = array->len * sizeof(int16_t);
-        MaybePointer maybe_start = try_allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
+        MaybePointer maybe_start =
+                try_allocate_to_arena(arr_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
         if (!maybe_start.exists) {
                 return new_nothing_MaybeInt16Array();
         }

@@ -26,7 +26,9 @@ DECLARE_NEW_NOTHING(MaybePointer);
 DECLARE_NEW_EXISTS(MaybePointer, void*);
 
 void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment);
-MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment);
+MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes,
+                                   ArenaAllocator* arena,
+                                   ptrdiff_t alignment);
 void* try_grow_arena_by(ptrdiff_t size_in_bytes, ArenaAllocator* arena);
 void free_arena(ArenaAllocator arena);
 ArenaAllocator new_arena_allocator(ptrdiff_t size_in_bytes);

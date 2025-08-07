@@ -24,7 +24,8 @@ IMPLEMENT_NEW_EXISTS(MaybeStringArray, StringArray)
 
 String copy_string(String* string, ArenaAllocator* allocator)
 {
-        char* start = unwrap_MaybePointer(try_allocate_to_arena(string->len, allocator, DEFAULT_ALIGNMENT));
+        char* start = unwrap_MaybePointer(
+                try_allocate_to_arena(string->len, allocator, DEFAULT_ALIGNMENT));
         String new_string = {.str = start, .len = string->len};
 
         return new_string;
@@ -40,7 +41,8 @@ MaybeString new_empty_string(int32_t len, ArenaAllocator* allocator)
                 return new_nothing_MaybeString();
         }
 
-        char* start = unwrap_MaybePointer(try_allocate_to_arena(size_in_bytes, allocator, DEFAULT_ALIGNMENT));
+        char* start = unwrap_MaybePointer(
+                try_allocate_to_arena(size_in_bytes, allocator, DEFAULT_ALIGNMENT));
         String string = {.str = start, .len = len};
 
         return new_exists_MaybeString(string);
@@ -56,7 +58,8 @@ MaybeString new_string_from_cstring(int32_t len, ArenaAllocator* allocator, cons
                 return new_nothing_MaybeString();
         }
 
-        char* start = unwrap_MaybePointer(try_allocate_to_arena(size_in_bytes, allocator, DEFAULT_ALIGNMENT));
+        char* start = unwrap_MaybePointer(
+                try_allocate_to_arena(size_in_bytes, allocator, DEFAULT_ALIGNMENT));
         start = strcpy(start, contents);
         String string = {.str = start, .len = len};
 
@@ -86,8 +89,8 @@ MaybeStringArray split_string_on_char(String* string, ArenaAllocator* allocator,
 
         char str_char = 0;
         int buffer_i = 0;
-        char* buffer =
-                unwrap_MaybePointer(try_allocate_to_arena(size_of_string_in_bytes, allocator, DEFAULT_ALIGNMENT));
+        char* buffer = unwrap_MaybePointer(
+                try_allocate_to_arena(size_of_string_in_bytes, allocator, DEFAULT_ALIGNMENT));
         MaybeStringArray string_array = new_nothing_MaybeStringArray();
 
         for (int i = 0; i < string->len; i++) {
@@ -99,7 +102,8 @@ MaybeStringArray split_string_on_char(String* string, ArenaAllocator* allocator,
                         size_t buffer_len = strlen(buffer);
 
                         if (buffer_len > INT32_MAX) {
-                                print_error("Requested string is larger than maximum allowed length.");
+                                print_error(
+                                        "Requested string is larger than maximum allowed length.");
 
                                 return new_nothing_MaybeStringArray();
                         }
@@ -107,13 +111,13 @@ MaybeStringArray split_string_on_char(String* string, ArenaAllocator* allocator,
                         if (string_array.exists) {
                                 int32_t len = string_array.item.len;
                                 string_array.item.len = len + 1;
-                                string_array.item.arr[len] =
-                                        unwrap_MaybeString(new_string_from_cstring(strlen(buffer), allocator, buffer));
+                                string_array.item.arr[len] = unwrap_MaybeString(
+                                        new_string_from_cstring(strlen(buffer), allocator, buffer));
                         } else {
                                 string_array.item = new_StringArray(1, allocator);
                                 string_array.item.len = 1;
-                                string_array.item.arr[0] =
-                                        unwrap_MaybeString(new_string_from_cstring(strlen(buffer), allocator, buffer));
+                                string_array.item.arr[0] = unwrap_MaybeString(
+                                        new_string_from_cstring(strlen(buffer), allocator, buffer));
                                 string_array.exists = EXISTS;
                         }
 

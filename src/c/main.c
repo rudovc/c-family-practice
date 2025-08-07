@@ -21,11 +21,13 @@ enum task {
         DOUBLY_LINKED_LIST_TASK
 };
 
-static const char* const OPTIONS[] = {"print", "reverse", "2d-array", "dynamic", "linked", "doubly-linked"};
+static const char* const OPTIONS[] = {
+        "print", "reverse", "2d-array", "dynamic", "linked", "doubly-linked"};
 
 int main()
 {
-        MaybeArenaAllocator maybe_arena = try_new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_INPUT_ARRAY_BUFFER * 2));
+        MaybeArenaAllocator maybe_arena =
+                try_new_arena_allocator(INPUT_BUFFER_SIZE + (REVERSE_INPUT_ARRAY_BUFFER * 2));
 
         if (!maybe_arena.exists) {
                 print_error("Failed to create allocator");
@@ -73,7 +75,8 @@ int main()
                 input_int_array.arr[2] = 3;
                 input_int_array.arr[3] = 2;
 
-                MaybeInt16Array output_maybe_int_array = reverse_int16_array(&input_int_array, &arena);
+                MaybeInt16Array output_maybe_int_array =
+                        reverse_int16_array(&input_int_array, &arena);
 
                 if (!output_maybe_int_array.exists) {
                         free_arena(arena);

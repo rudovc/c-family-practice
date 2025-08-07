@@ -12,8 +12,8 @@
 
 static const ptrdiff_t ERROR_BUFFER_SIZE = 64;
 
-// TODO: This is not a sound implementation at all. If the memory gets copied elsewhere, all pointers already handed out
-// are invalidated
+// TODO: This is not a sound implementation at all. If the memory gets copied elsewhere, all
+// pointers already handed out are invalidated
 void* try_grow_arena_by(ptrdiff_t size_in_bytes, ArenaAllocator* arena)
 {
         free_arena(*arena);
@@ -98,7 +98,9 @@ void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_
         return start;
 }
 
-MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_t alignment)
+MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes,
+                                   ArenaAllocator* arena,
+                                   ptrdiff_t alignment)
 {
         void* start = inner_allocate_to_arena(size_in_bytes, arena, alignment);
 

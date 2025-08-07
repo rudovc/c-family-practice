@@ -52,7 +52,8 @@ DECLARE_HEAP_ARRAY(int16_t, Int16Array)
                         print_error("Requested ##N is larger than maximum allowed length."); \
                         return new_nothing_##N(); \
                 } \
-                MaybePointer maybe_start = try_allocate_to_arena(len, allocator, DEFAULT_ALIGNMENT); \
+                MaybePointer maybe_start = \
+                        try_allocate_to_arena(len, allocator, DEFAULT_ALIGNMENT); \
                 if (!maybe_start.exists) \
                         return new_nothing_##M(); \
                 N* start = maybe_start.item; \

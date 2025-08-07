@@ -9,7 +9,8 @@
 
 MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes, ArenaAllocator* allocator)
 {
-        MaybePointer maybe_buffer = try_allocate_to_arena(buffer_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
+        MaybePointer maybe_buffer =
+                try_allocate_to_arena(buffer_size_in_bytes, allocator, DEFAULT_ALIGNMENT);
 
         if (!maybe_buffer.exists) {
                 return new_nothing_MaybeString();
