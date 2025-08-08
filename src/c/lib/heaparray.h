@@ -8,10 +8,12 @@
 
 #define DECLARE_HEAP_ARRAY(T, N) \
         typedef struct { \
-                T* arr; \
                 int32_t len; \
+                T* arr; \
         } N; \
-        N new_##N(int32_t len, ArenaAllocator* allocator);
+        N new_##N(int32_t len, ArenaAllocator* allocator); \
+        void for_each_in_##N(N* array, void (*callback)(T*));
+// N grow_##N(int32_t len, ArenaAllocator* allocator);
 
 DECLARE_HEAP_ARRAY(int32_t, Int32Array)
 DECLARE_HEAP_ARRAY(int16_t, Int16Array)
@@ -29,18 +31,26 @@ DECLARE_HEAP_ARRAY(int16_t, Int16Array)
                 N array = {.arr = start, .len = len}; \
                 return array; \
         } \
-        N grow_##N(int32_t len, ArenaAllocator* allocator) \
+        void for_each_in_##N(N* array, void (*callback)(T*)) \
         { \
-                uintptr_t size_in_bytes = len * sizeof(T); \
-                if (size_in_bytes > INT32_MAX) { \
-                        print_error("Requested ##N  is larger than maximum allowed length."); \
-                        free_arena(*allocator); \
-                        abort(); \
+                T* arr = array->arr; \
+                for (int i = 0; i < array->len; ++i) { \
+                        callback(&arr[i]); \
                 } \
-                T* start = allocate_to_arena(len, allocator, DEFAULT_ALIGNMENT); \
-                N array = {.arr = start, .len = len}; \
-                return array; \
         }
+
+/* N grow_##N(int32_t len, ArenaAllocator* allocator) \
+ { \
+         uintptr_t size_in_bytes = len * sizeof(T); \
+         if (size_in_bytes > INT32_MAX) { \
+                 print_error("Requested ##N  is larger than maximum allowed length."); \
+                 free_arena(*allocator); \
+                 abort(); \
+         } \
+         T* start = allocate_to_arena(len, allocator, DEFAULT_ALIGNMENT); \
+         N array = {.arr = start, .len = len}; \
+         return array; \
+ } */
 
 #define DECLARE_MAYBE_HEAP_ARRAY(N, M) M try_new_##N(int32_t len, ArenaAllocator* allocator);
 
@@ -60,14 +70,6 @@ DECLARE_HEAP_ARRAY(int16_t, Int16Array)
                 N array = {.arr = start, .len = len}; \
                 return new_exists_##M(array); \
         }
-
-/** void for_each_in_##N(N array, (void*)(T element)callback) \
-{ \
-        (T*)arr = array->arr; \
-        for (int i = 0; i < array->len; i++) { \
-                callback(arr[i]); \
-        } \
-}*/
 
 MAYBE(Int32Array) MaybeInt32Array;
 DECLARE_UNWRAP(MaybeInt32Array, Int32Array)

@@ -7,8 +7,8 @@
 #include "maybe.h"
 
 struct String {
-        char* str;
         int32_t len;
+        char* str;
 };
 
 typedef struct String String;
@@ -26,7 +26,17 @@ DECLARE_UNWRAP(MaybeStringArray, StringArray);
 DECLARE_NEW_NOTHING(MaybeStringArray);
 DECLARE_NEW_EXISTS(MaybeStringArray, StringArray);
 
+MAYBE(MaybeStringArray*) MaybeStringArrayPointer;
+DECLARE_UNWRAP(MaybeStringArrayPointer, MaybeStringArray*);
+DECLARE_NEW_NOTHING(MaybeStringArrayPointer);
+DECLARE_NEW_EXISTS(MaybeStringArrayPointer, MaybeStringArray*);
+
 MaybeString new_empty_string(int32_t len, ArenaAllocator* allocator);
-MaybeString new_string_from_cstring(int32_t len, ArenaAllocator* allocator, const char* contents);
+MaybeString new_string_from_bytes(int32_t len, ArenaAllocator* allocator, const char* contents);
 MaybeString reverse_string(String* string, ArenaAllocator* allocator);
 MaybeStringArray split_string_on_char(String* string, ArenaAllocator* allocator, char delimiter);
+
+char* new_cstring_from_string(String* string, ArenaAllocator* allocator);
+
+void print_string(String* string);
+void println_string(String* string);

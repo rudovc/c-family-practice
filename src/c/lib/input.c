@@ -7,6 +7,7 @@
 #include "error.h"
 #include "str.h"
 
+// Add one to `buffer_size_in_bytes` for null terminator
 MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes, ArenaAllocator* allocator)
 {
         MaybePointer maybe_buffer =
@@ -28,7 +29,7 @@ MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes, ArenaAllocator* 
 
         size_t len = strlen(buffer);
 
-        if (len > INT32_MAX) {
+        if (len > INT32_MAX || len > buffer_size_in_bytes) {
                 print_error("Requested buffer is larger than maximum allowed length.");
 
                 return new_nothing_MaybeString();
@@ -37,7 +38,7 @@ MaybeString take_user_input_stdin(int32_t buffer_size_in_bytes, ArenaAllocator* 
         // Strip whitespace from fgets buffer
         buffer[len - 1] = 0;
 
-        String string = {.len = len - 1, .str = buffer};
+        String string = {.len = (int32_t)len - 1, .str = buffer};
 
         return new_exists_MaybeString(string);
 }

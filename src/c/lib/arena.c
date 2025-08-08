@@ -53,8 +53,16 @@ void* inner_allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, pt
 
         uintptr_t remainder = (uintptr_t)new_tail % alignment;
 
-        if (remainder != 0) {
+        if (remainder != 0 && alignment > 0) {
                 new_tail = new_tail + (alignment - remainder);
+        } else {
+                remainder = 0;
+        }
+
+        if (alignment < 0) {
+                print_error("Provided negative alignment to function `allocate_to_arena`");
+
+                return NULL;
         }
 
         if (new_tail > arena->head + arena->size) {

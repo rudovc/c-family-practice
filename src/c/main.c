@@ -10,7 +10,7 @@
 #include "lib/str.h"
 
 static const int32_t INPUT_BUFFER_SIZE = 16;
-static const ptrdiff_t REVERSE_INPUT_ARRAY_BUFFER = 64 * sizeof(int16_t);
+static const ptrdiff_t REVERSE_INPUT_ARRAY_BUFFER = 128 * sizeof(int16_t);
 
 enum task {
         PRINT_USER_INPUT_TASK,
@@ -64,9 +64,9 @@ int main()
                         return 1;
                 }
 
-                MaybeStringArray input = split_string_on_char(&maybe_input.item, &arena, ' ');
+                MaybeStringArray split_input = split_string_on_char(&maybe_input.item, &arena, ' ');
 
-                printf("%s", input.item.arr->str);
+                for_each_in_StringArray(&split_input.item, println_string);
 
                 Int16Array input_int_array = new_Int16Array(4, &arena);
 
@@ -84,11 +84,11 @@ int main()
                         return 1;
                 }
 
-                Int16Array output_int_array = unwrap_MaybeInt16Array(output_maybe_int_array);
+                // Int16Array output_int_array = unwrap_MaybeInt16Array(output_maybe_int_array);
 
-                for (int i = 0; i < output_int_array.len; ++i) {
-                        printf("%d\n", output_int_array.arr[i]);
-                }
+                // for (int i = 0; i < output_int_array.len; i++) {
+                //         printf("%d\n", output_int_array.arr[i]);
+                // }
         }
 
         free_arena(arena);
