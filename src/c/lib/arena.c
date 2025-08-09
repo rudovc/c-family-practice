@@ -6,6 +6,7 @@
 #include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 #include "error.h"
 #include "maybe.h"
@@ -104,6 +105,20 @@ void* allocate_to_arena(ptrdiff_t size_in_bytes, ArenaAllocator* arena, ptrdiff_
         }
 
         return start;
+}
+
+// Invalidates old references
+void* reallocate_in_arena(void* object,
+                          ptrdiff_t old_size_in_bytes,
+                          ptrdiff_t new_size_in_bytes,
+                          ArenaAllocator* arena,
+                          ptrdiff_t alignment)
+{
+        void* new_start = allocate_to_arena(new_size_in_bytes, arena, alignment);
+
+        memcpy(new_start, object, old_size_in_bytes);
+
+        return new_start;
 }
 
 MaybePointer try_allocate_to_arena(ptrdiff_t size_in_bytes,

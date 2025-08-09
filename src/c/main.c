@@ -1,6 +1,7 @@
 #include <asm-generic/errno-base.h>
 #include <stdint.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "lib/arena.h"
@@ -9,8 +10,9 @@
 #include "lib/input.h"
 #include "lib/str.h"
 
-static const int32_t INPUT_BUFFER_SIZE = 16;
-static const ptrdiff_t REVERSE_INPUT_ARRAY_BUFFER = 128 * sizeof(int16_t);
+static const int32_t INPUT_BUFFER_SIZE = 512;
+static const ptrdiff_t REVERSE_INPUT_ARRAY_BUFFER = 256 * sizeof(int16_t);
+static const int8_t RADIX_BASE_10 = 10;
 
 enum task {
         PRINT_USER_INPUT_TASK,
@@ -66,14 +68,24 @@ int main()
 
                 MaybeStringArray split_input = split_string_on_char(&maybe_input.item, &arena, ' ');
 
-                for_each_in_StringArray(&split_input.item, println_string);
+                if (!split_input.exists) {
+                        print_error("Failed to split input string into parts");
 
-                Int16Array input_int_array = new_Int16Array(4, &arena);
+                        return 1;
+                }
 
-                input_int_array.arr[0] = 1;
-                input_int_array.arr[1] = 4;
-                input_int_array.arr[2] = 3;
-                input_int_array.arr[3] = 2;
+                Int16Array input_int_array = new_Int16Array(0, &arena);
+
+                for (int i = 0; i < split_input.item.len; ++i) {
+                        char* substring = new_cstring_from_string(&split_input.item.arr[i], &arena);
+
+                        int16_t number = (int16_t)strtol(substring, NULL, RADIX_BASE_10);
+
+                        input_int_array = grow_by_Int16Array(
+                                &input_int_array, input_int_array.len + 1, &arena);
+
+                        input_int_array.arr[input_int_array.len - 1] = number;
+                }
 
                 MaybeInt16Array output_maybe_int_array =
                         reverse_int16_array(&input_int_array, &arena);
@@ -84,11 +96,11 @@ int main()
                         return 1;
                 }
 
-                // Int16Array output_int_array = unwrap_MaybeInt16Array(output_maybe_int_array);
+                Int16Array output_int_array = unwrap_MaybeInt16Array(output_maybe_int_array);
 
-                // for (int i = 0; i < output_int_array.len; i++) {
-                //         printf("%d\n", output_int_array.arr[i]);
-                // }
+                for (int i = 0; i < output_int_array.len; i++) {
+                        printf("%d\n", output_int_array.arr[i]);
+                }
         }
 
         free_arena(arena);

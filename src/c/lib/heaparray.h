@@ -12,8 +12,8 @@
                 T* arr; \
         } N; \
         N new_##N(int32_t len, ArenaAllocator* allocator); \
+        N grow_by_##N(N* array, int32_t new_len, ArenaAllocator* allocator); \
         void for_each_in_##N(N* array, void (*callback)(T*));
-// N grow_##N(int32_t len, ArenaAllocator* allocator);
 
 DECLARE_HEAP_ARRAY(int32_t, Int32Array)
 DECLARE_HEAP_ARRAY(int16_t, Int16Array)
@@ -37,20 +37,24 @@ DECLARE_HEAP_ARRAY(int16_t, Int16Array)
                 for (int i = 0; i < array->len; ++i) { \
                         callback(&arr[i]); \
                 } \
+        } \
+        N grow_by_##N(N* array, int32_t new_len, ArenaAllocator* allocator) \
+        { \
+                uintptr_t old_size_in_bytes = array->len * sizeof(T); \
+                uintptr_t new_size_in_bytes = new_len * sizeof(T); \
+                if (new_size_in_bytes > INT32_MAX) { \
+                        print_error("Requested ##N  is larger than maximum allowed length."); \
+                        free_arena(*allocator); \
+                        abort(); \
+                } \
+                T* new_start = reallocate_in_arena(array->arr, \
+                                                   old_size_in_bytes, \
+                                                   new_size_in_bytes, \
+                                                   allocator, \
+                                                   DEFAULT_ALIGNMENT); \
+                N new_array = {.arr = new_start, .len = new_len}; \
+                return new_array; \
         }
-
-/* N grow_##N(int32_t len, ArenaAllocator* allocator) \
- { \
-         uintptr_t size_in_bytes = len * sizeof(T); \
-         if (size_in_bytes > INT32_MAX) { \
-                 print_error("Requested ##N  is larger than maximum allowed length."); \
-                 free_arena(*allocator); \
-                 abort(); \
-         } \
-         T* start = allocate_to_arena(len, allocator, DEFAULT_ALIGNMENT); \
-         N array = {.arr = start, .len = len}; \
-         return array; \
- } */
 
 #define DECLARE_MAYBE_HEAP_ARRAY(N, M) M try_new_##N(int32_t len, ArenaAllocator* allocator);
 
