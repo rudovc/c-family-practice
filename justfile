@@ -1,12 +1,26 @@
 clean:
-    rm -rf ./CMakeCache.txt && rm -rf ./CMakeFiles/
+    rm -rf build/linux/CMakeCache.txt && rm -rf build/linux/CMakeFiles/
+
+clean-windows:
+    rm -rf build/windows/CMakeCache.txt && rm -rf build/windows/CMakeFiles/
+
 build:
-    cmake --build . --config Debug
+    cd build/linux && cmake --build . --config Debug
+
 configure:
-    cmake -D CMAKE_BUILD_TYPE="Debug" -D CMAKE_CXX_COMPILER="clang++" -D CMAKE_C_COMPILER="clang" .
+    cd build/linux && cmake .
+
+build-win:
+    cd build/windows && cmake --build . --config Debug -v
+
+configure-win:
+    cd build/windows && cmake .
+
 runc:
     ./out/c_practice
+
 runcpp:
     ./out/c_practice
+
 format:
     find ./src/ -iname '*.h' -o -iname '*.cpp' -o -iname '*.c' | xargs clang-format -i

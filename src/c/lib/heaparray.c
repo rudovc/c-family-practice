@@ -1,6 +1,5 @@
 #include "heaparray.h"
 
-#include <asm-generic/errno-base.h>
 #include <errno.h>
 #include <stddef.h>
 #include <stdint.h>
